@@ -66,9 +66,11 @@ def delete():
 
     path = app.config['UPLOAD_FOLDER'] + "/" + filename
 
-    if os.path.exists(path):
+    try:
         os.remove(path)
-    else:
+        flash("%s is removed" % filename)
+    except:
         flash("can not find the file")
+
     return redirect('/')
 
