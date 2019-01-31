@@ -19,15 +19,15 @@ def home():
 @app.route('/upload', methods=["GET", "POST"])
 def upload_file():
     if 'file' not in request.files:
-        flash("no selected file")
+        flash("Error: no selected file")
         return redirect('/')
     f = request.files['file']
     if not allowed_file(f.filename):
-        flash('the extension format is not allowed')
+        flash('Error: the extension format is not allowed')
         return redirect('/')
     filename = secure_filename(f.filename)
     f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    flash('file is uploaded successfully')
+    flash('%s is uploaded successfully' % filename)
     return redirect('/')
 
 @app.route('/download', methods=["GET", "POST"])
@@ -40,7 +40,7 @@ def download_file():
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
     except:
-        flash('can not find the file')
+        flash('Error: can not find the file')
         return redirect('/')
 
 def convert_bytes(num):
@@ -70,7 +70,7 @@ def delete():
         os.remove(path)
         flash("%s is removed" % filename)
     except:
-        flash("can not find the file")
+        flash("Error: can not find the file")
 
     return redirect('/')
 
